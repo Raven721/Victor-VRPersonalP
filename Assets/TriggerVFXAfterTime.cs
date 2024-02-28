@@ -6,7 +6,7 @@ public class TriggerVFXAfterTime : MonoBehaviour
     public GameObject[] vfxPrefabs;
 
     // 起始延迟时间（秒）
-    private float delay = 60f;
+    private float delay = 2f;
 
     void Start()
     {
