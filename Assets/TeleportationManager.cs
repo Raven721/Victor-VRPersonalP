@@ -7,6 +7,7 @@ public class TeleportationManager : MonoBehaviour
     public TMP_Text teleportCountText; // 在Inspector中设置的TextMeshPro文本组件
     public GameObject[] vfxObjects; // 在Inspector中设置的VFX对象数组
     private int teleportCount = 0; // 用于跟踪传送次数
+    private int maxTeleports = 10; // 最大传送次数
 
     void Start()
     {
@@ -31,17 +32,25 @@ public class TeleportationManager : MonoBehaviour
 
     private void OnEndLocomotion(LocomotionSystem locomotionSystem)
     {
-        teleportCount++; // 每次传送后增加计数
-        UpdateTeleportCountText();
+        if (teleportCount < maxTeleports)
+        {
+            teleportCount++; // 每次传送后增加计数
+            UpdateTeleportCountText();
 
-        // 根据传送次数激活特定的VFX
-        ActivateVFX(teleportCount);
+            // 根据传送次数激活特定的VFX
+            ActivateVFX(teleportCount);
+
+            if (teleportCount == maxTeleports)
+            {
+                EndGame();
+            }
+        }
     }
 
     private void UpdateTeleportCountText()
     {
-        // 更新TextMeshPro文本显示当前传送次数
-        teleportCountText.text = "Teleport Count: " + teleportCount;
+        // 更新TextMeshPro文本显示剩余传送次数
+        teleportCountText.text = "Teleport Count: " + teleportCount + " / " + maxTeleports;
     }
 
     private void ActivateVFX(int count)
@@ -59,7 +68,12 @@ public class TeleportationManager : MonoBehaviour
         {
             vfxObjects[2].SetActive(true);
         }
-
         // 这里可以根据需要添加更多条件
+    }
+
+    private void EndGame()
+    {
+        // 结束游戏，可以添加游戏结束的逻辑，如弹出结束面板或重置场景等
+        Debug.Log("Game Over! You've used all your teleportations.");
     }
 }
