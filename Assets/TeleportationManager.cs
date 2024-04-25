@@ -1,13 +1,14 @@
 using UnityEngine;
 using TMPro; // 引用TextMeshPro命名空间
 using UnityEngine.XR.Interaction.Toolkit; // 引用XR Interaction Toolkit
+using UnityEngine.SceneManagement;
 
 public class TeleportationManager : MonoBehaviour
 {
     public TMP_Text teleportCountText; // 在Inspector中设置的TextMeshPro文本组件
     public GameObject[] vfxObjects; // 在Inspector中设置的VFX对象数组
     private int teleportCount = 0; // 用于跟踪传送次数
-    private int maxTeleports = 10; // 最大传送次数
+    private int maxTeleports = 8; // 最大传送次数
 
     void Start()
     {
@@ -50,7 +51,7 @@ public class TeleportationManager : MonoBehaviour
     private void UpdateTeleportCountText()
     {
         // 更新TextMeshPro文本显示剩余传送次数
-        teleportCountText.text = "Teleport Count: " + teleportCount + " / " + maxTeleports;
+        teleportCountText.text = "CountingTime: " + teleportCount + " / " + maxTeleports;
     }
 
     private void ActivateVFX(int count)
@@ -62,11 +63,15 @@ public class TeleportationManager : MonoBehaviour
         }
         else if (count == 5 && vfxObjects.Length > 1)
         {
+            vfxObjects[0].SetActive(false);
             vfxObjects[1].SetActive(true);
+            
         }
         else if (count == 6 && vfxObjects.Length > 1)
         {
+            vfxObjects[1].SetActive(false);
             vfxObjects[2].SetActive(true);
+           
         }
         // 这里可以根据需要添加更多条件
     }
@@ -74,6 +79,7 @@ public class TeleportationManager : MonoBehaviour
     private void EndGame()
     {
         // 结束游戏，可以添加游戏结束的逻辑，如弹出结束面板或重置场景等
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Debug.Log("Game Over! You've used all your teleportations.");
     }
 }
